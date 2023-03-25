@@ -18,16 +18,19 @@ const ExpenseTracker = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const [allData, setAllData] = useState<{
-    description: string;
-    amount: number;
-    category: string;
-  } | null>(null);
+  // const [allData, setAllData] = useState<{
+  //   description: string;
+  //   amount: number;
+  //   category: string;
+  // } | null>(null);
+
+  const [allData, setAllData] = useState([]);
 
   const onSubmit = (data: FieldValues) => {
     // setAllData(data);
     setAllData(
-      data as { description: string; amount: number; category: string } | null
+      // data as { description: string; amount: number; category: string } | null
+      data as []
     );
   };
 
