@@ -29,6 +29,10 @@ const ExpenseTracker = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
   // const expenses = [
   //   { id: 1, description: "aaa", amount: 10, category: "Utilities" },
   //   { id: 2, description: "bbb", amount: 10, category: "Utilities" },
@@ -39,44 +43,73 @@ const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
 
   return (
-    <div className=" flex flex-col text-black bg-white rounded-md p-4">
-      <label htmlFor="desc" className="block text-sm font-medium">
-        Description
-      </label>
-      <div className="mt-1">
-        <input
-          type="text"
-          name="desc"
-          id="desc"
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          placeholder="Description"
+    <div className=" flex flex-col text-black py-4 ">
+      <form
+        className="bg-white rounded-md p-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <label htmlFor="desc" className="block text-sm font-medium">
+          Description
+        </label>
+        <div className="mt-1">
+          <input
+            type="text"
+            id="desc"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Description"
+            {...register("description", {
+              required: true,
+              minLength: 3,
+            })}
+          />
+          {errors.description && (
+            <p className="-mt-6 ml-2">{errors.description.message}</p>
+          )}
+        </div>
+        <label htmlFor="amount" className="block text-sm font-medium mt-3">
+          Amount
+        </label>
+        <div className="mt-1">
+          <input
+            type="text"
+            id="amount"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Amount"
+            {...register("amount", {
+              required: true,
+            })}
+          />
+        </div>
+        <label htmlFor="category" className="block text-sm font-medium mt-3">
+          Category
+        </label>
+        <div className="mt-1">
+          <input
+            type="text"
+            id="category"
+            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Category"
+            {...register("category", {
+              required: true,
+              minLength: 3,
+            })}
+          />
+        </div>
+        <div className="flex justify-center items-center mt-2">
+          <button
+            type="submit"
+            className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add
+          </button>
+        </div>
+      </form>
+      <div>
+        <Table
+          expenses={expenses}
+          onDelete={(id) => console.log("delete", id)}
         />
       </div>
-      <label htmlFor="amount" className="block text-sm font-medium mt-3">
-        Amount
-      </label>
-      <div className="mt-1">
-        <input
-          type="text"
-          name="amount"
-          id="amount"
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          placeholder="Description"
-        />
-      </div>
-      <label htmlFor="category" className="block text-sm font-medium mt-3">
-        Category
-      </label>
-      <div className="mt-1">
-        <input
-          type="text"
-          name="category"
-          id="category"
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          placeholder="Description"
-        />
-      </div>
-      <Table expenses={expenses} onDelete={(id) => console.log("delete", id)} />
     </div>
   );
 };
