@@ -29,15 +29,55 @@ const ExpenseTracker = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const expenses = [
-    { id: 1, description: "aaa", amount: 10, category: "Utilities" },
-    { id: 2, description: "bbb", amount: 10, category: "Utilities" },
-    { id: 3, description: "ccc", amount: 10, category: "Utilities" },
-    { id: 4, description: "ddd", amount: 10, category: "Utilities" },
-  ];
+  // const expenses = [
+  //   { id: 1, description: "aaa", amount: 10, category: "Utilities" },
+  //   { id: 2, description: "bbb", amount: 10, category: "Utilities" },
+  //   { id: 3, description: "ccc", amount: 10, category: "Utilities" },
+  //   { id: 4, description: "ddd", amount: 10, category: "Utilities" },
+  // ];
+
+  const [expenses, setExpenses] = useState([]);
 
   return (
-    <Table expenses={expenses} onDelete={(id) => console.log("delete", id)} />
+    <div className=" flex flex-col text-black bg-white rounded-md p-4">
+      <label htmlFor="desc" className="block text-sm font-medium">
+        Description
+      </label>
+      <div className="mt-1">
+        <input
+          type="text"
+          name="desc"
+          id="desc"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Description"
+        />
+      </div>
+      <label htmlFor="amount" className="block text-sm font-medium mt-3">
+        Amount
+      </label>
+      <div className="mt-1">
+        <input
+          type="text"
+          name="amount"
+          id="amount"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Description"
+        />
+      </div>
+      <label htmlFor="category" className="block text-sm font-medium mt-3">
+        Category
+      </label>
+      <div className="mt-1">
+        <input
+          type="text"
+          name="category"
+          id="category"
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="Description"
+        />
+      </div>
+      <Table expenses={expenses} onDelete={(id) => console.log("delete", id)} />
+    </div>
   );
 };
 
