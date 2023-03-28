@@ -20,9 +20,11 @@ export interface Expense {
 export interface Props {
   expenses: Expense[];
   onDelete: (id: number) => void;
+  setExpenses: (expenses: Expense[]) => void;
 }
 
 const ExpenseTracker = () => {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const {
     register,
     handleSubmit,
@@ -31,16 +33,16 @@ const ExpenseTracker = () => {
 
   const onSubmit = (data: FieldValues) => {
     console.log(data);
+    setExpenses((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        description: data.description,
+        amount: data.amount,
+        category: data.category,
+      },
+    ]);
   };
-
-  // const expenses = [
-  //   { id: 1, description: "aaa", amount: 10, category: "Utilities" },
-  //   { id: 2, description: "bbb", amount: 10, category: "Utilities" },
-  //   { id: 3, description: "ccc", amount: 10, category: "Utilities" },
-  //   { id: 4, description: "ddd", amount: 10, category: "Utilities" },
-  // ];
-
-  const [expenses, setExpenses] = useState([]);
 
   return (
     <div className=" flex flex-col text-black py-4 ">
@@ -48,13 +50,10 @@ const ExpenseTracker = () => {
         className="bg-white rounded-md p-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label htmlFor="desc" className="block text-sm font-medium">
-          Description
-        </label>
+        <label className="block text-sm font-medium">Description</label>
         <div className="mt-1">
           <input
             type="text"
-            id="desc"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Description"
             {...register("description", {
@@ -66,27 +65,22 @@ const ExpenseTracker = () => {
             <p className="-mt-6 ml-2">{errors.description.message}</p>
           )}
         </div>
-        <label htmlFor="amount" className="block text-sm font-medium mt-3">
-          Amount
-        </label>
+        <label className="block text-sm font-medium mt-3">Amount</label>
         <div className="mt-1">
           <input
-            type="text"
-            id="amount"
+            type="number"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Amount"
             {...register("amount", {
               required: true,
+              valueAsNumber: true,
             })}
           />
         </div>
-        <label htmlFor="category" className="block text-sm font-medium mt-3">
-          Category
-        </label>
+        <label className="block text-sm font-medium mt-3">Category</label>
         <div className="mt-1">
           <input
             type="text"
-            id="category"
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             placeholder="Category"
             {...register("category", {
@@ -108,6 +102,7 @@ const ExpenseTracker = () => {
         <Table
           expenses={expenses}
           onDelete={(id) => console.log("delete", id)}
+          setExpenses={setExpenses}
         />
       </div>
     </div>

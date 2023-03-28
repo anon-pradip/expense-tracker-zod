@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Props } from "./ExpenseTracker";
+import { MdDeleteForever } from "react-icons/md";
 
-const Table = ({ expenses, onDelete }: Props) => {
+const Table = ({ expenses, onDelete, setExpenses }: Props) => {
   const [data, setData] = useState([]);
+  const handleDelete = (id: number) => {
+    setExpenses(expenses.filter((expense) => expense.id !== id));
+  };
 
   return (
     <div className=" mt-2 bg-white rounded-md p-4 text-black">
@@ -43,8 +47,8 @@ const Table = ({ expenses, onDelete }: Props) => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {expenses.map((expense) => (
-                      <tr key={expense.id}>
+                    {expenses.map((expense, index) => (
+                      <tr key={index}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                           {expense.description}
                         </td>
@@ -54,7 +58,12 @@ const Table = ({ expenses, onDelete }: Props) => {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {expense.category}
                         </td>
-                        <td onClick={() => onDelete(expense.id)}>delete</td>
+                        <td
+                          onClick={() => handleDelete(expense.id)}
+                          className="hover:cursor-pointer"
+                        >
+                          <MdDeleteForever size={20} />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
