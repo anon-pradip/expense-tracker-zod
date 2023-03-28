@@ -3,6 +3,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Table from "./Table";
+import Filter from "./Filter";
 
 const schema = z.object({
   description: z.string().min(3, { message: "Required" }),
@@ -25,6 +26,7 @@ export interface Props {
 
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [selectedValue, setSelectedValue] = useState("");
   const {
     register,
     handleSubmit,
@@ -44,6 +46,22 @@ const ExpenseTracker = () => {
     ]);
   };
 
+  const finalSelectedValues =
+    selectedValue.toLowerCase() === "all categories"
+      ? expenses
+      : expenses.filter(
+          (expense) =>
+            expense.category.toLowerCase() === selectedValue.toLowerCase()
+        );
+
+  // const finalSelectedValues ={
+  //   if(selectedValue.toLowerCase() === 'all categories'){
+  //     return expenses
+  //   } else{
+  //     return expenses.filter((expense) => expense.category === selectedValue)
+  //   }
+  // }
+
   return (
     <div className=" flex flex-col text-black py-4 ">
       <form
@@ -61,9 +79,11 @@ const ExpenseTracker = () => {
               minLength: 3,
             })}
           />
-          {errors.description && (
-            <p className="-mt-6 ml-2">{errors.description.message}</p>
-          )}
+          <p className="mt-7 text-sm text-red-500">
+            {errors.description && (
+              <p className="-mt-6 ml-2">{errors.description.message}</p>
+            )}
+          </p>
         </div>
         <label className="block text-sm font-medium mt-3">Amount</label>
         <div className="mt-1">
@@ -76,6 +96,11 @@ const ExpenseTracker = () => {
               valueAsNumber: true,
             })}
           />
+          <p className="mt-7 text-sm text-red-500">
+            {errors.amount && (
+              <p className="-mt-6 ml-2">{errors.amount.message}</p>
+            )}
+          </p>
         </div>
         <label className="block text-sm font-medium mt-3">Category</label>
         <div className="mt-1">
@@ -88,6 +113,11 @@ const ExpenseTracker = () => {
               minLength: 3,
             })}
           />
+          <p className="mt-7 text-sm text-red-500">
+            {errors.category && (
+              <p className="-mt-6 ml-2">{errors.category.message}</p>
+            )}
+          </p>
         </div>
         <div className="flex justify-center items-center mt-2">
           <button
@@ -97,10 +127,11 @@ const ExpenseTracker = () => {
             Add
           </button>
         </div>
+        <Filter onSelectCategory={(category) => setSelectedValue(category)} />
       </form>
       <div>
         <Table
-          expenses={expenses}
+          expenses={finalSelectedValues}
           onDelete={(id) => console.log("delete", id)}
           setExpenses={setExpenses}
         />

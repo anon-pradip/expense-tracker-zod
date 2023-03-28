@@ -8,9 +8,10 @@ const Table = ({ expenses, onDelete, setExpenses }: Props) => {
     setExpenses(expenses.filter((expense) => expense.id !== id));
   };
 
+  const categories = ["all categories", "milk", "vegetables", "snacks"];
+
   return (
     <div className=" mt-2 bg-white rounded-md p-4 text-black">
-      <p>List</p>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
